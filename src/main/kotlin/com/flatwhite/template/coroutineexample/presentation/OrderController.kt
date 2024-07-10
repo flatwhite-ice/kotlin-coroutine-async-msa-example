@@ -45,7 +45,7 @@ class OrderController(
                 userDeferred
                     .await()
                     .also {
-                        log.info { "userAddress : $it" }
+                        log.info { "user : $it" }
                     }
 
             // TODO create order
