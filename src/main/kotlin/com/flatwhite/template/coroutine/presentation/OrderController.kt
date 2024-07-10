@@ -1,10 +1,10 @@
-package com.flatwhite.template.coroutineexample.presentation
+package com.flatwhite.template.coroutine.presentation
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.flatwhite.template.coroutineexample.infrastructure.CartWebClient
-import com.flatwhite.template.coroutineexample.infrastructure.UserWebClient
-import com.flatwhite.template.coroutineexample.presentation.OrderController.Companion.BASE_URL
+import com.flatwhite.template.coroutine.outbound.CartWebClient
+import com.flatwhite.template.coroutine.outbound.UserWebClient
+import com.flatwhite.template.coroutine.presentation.OrderController.Companion.BASE_URL
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import mu.KotlinLogging

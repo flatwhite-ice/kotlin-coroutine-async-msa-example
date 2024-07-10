@@ -1,4 +1,4 @@
-package com.flatwhite.template.coroutineexample.configuration
+package com.flatwhite.template.coroutine.configuration
 
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry

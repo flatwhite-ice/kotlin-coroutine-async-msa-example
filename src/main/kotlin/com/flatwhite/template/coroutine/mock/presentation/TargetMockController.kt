@@ -1,8 +1,8 @@
-package com.flatwhite.template.coroutineexample.mock.presentation
+package com.flatwhite.template.coroutine.mock.presentation
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.flatwhite.template.coroutineexample.mock.presentation.TargetMockController.Companion.BASE_URL
+import com.flatwhite.template.coroutine.mock.presentation.TargetMockController.Companion.BASE_URL
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping

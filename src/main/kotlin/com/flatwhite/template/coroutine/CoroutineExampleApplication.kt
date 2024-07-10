@@ -1,4 +1,4 @@
-package com.flatwhite.template.coroutineexample
+package com.flatwhite.template.coroutine
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

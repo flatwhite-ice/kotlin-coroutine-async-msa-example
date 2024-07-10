@@ -1,4 +1,4 @@
-package com.flatwhite.template.coroutineexample.configuration
+package com.flatwhite.template.coroutine.configuration
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.netty.channel.ChannelOption

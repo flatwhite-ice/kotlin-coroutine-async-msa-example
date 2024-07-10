@@ -1,4 +1,4 @@
-package com.flatwhite.template.coroutineexample.configuration
+package com.flatwhite.template.coroutine.configuration
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonParser

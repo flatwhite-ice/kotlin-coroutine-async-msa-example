@@ -1,8 +1,8 @@
-package com.flatwhite.template.coroutineexample.infrastructure
+package com.flatwhite.template.coroutine.outbound
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.flatwhite.template.coroutineexample.base.exception.HttpResponseException
+import com.flatwhite.template.coroutine.base.exception.HttpResponseException
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
 import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator
 import io.github.resilience4j.reactor.retry.RetryOperator
@@ -18,29 +18,29 @@ import reactor.core.publisher.Mono
 private val log = KotlinLogging.logger {}
 
 @Component
-class UserWebClient(
+class CartWebClient(
     @Qualifier("defaultWebClientBuilder")
     private val defaultWebClientBuilder: WebClient.Builder,
     private val circuitBreakerRegistry: CircuitBreakerRegistry,
     private val retryRegistry: RetryRegistry,
 ) {
     companion object {
-        const val USER_CLIENT = "user-client"
-        const val USER_CLIENT_CIRCUIT_BREAKER = USER_CLIENT
-        const val USER_CLIENT_RETRY_REGISTRY = USER_CLIENT
+        const val CART_CLIENT = "cart-client"
+        const val CART_CLIENT_CIRCUIT_BREAKER = CART_CLIENT
+        const val CART_CLIENT_RETRY_REGISTRY = CART_CLIENT
     }
 
-    suspend fun getUser(userId: String) = this.requestUser(userId = userId).awaitSingleOrNull()
+    suspend fun getCartItem(cartId: String) = this.cartItem(cartId = cartId).awaitSingleOrNull()
 
-    fun requestUser(userId: String): Mono<UserResponse> =
+    fun cartItem(cartId: String): Mono<CartResponse> =
         defaultWebClientBuilder
             .build()
             .get()
-            .uri("/api/users/$userId")
+            .uri("/api/carts/$cartId")
             .headers { } // TODO header setting
             .retrieve()
             .onStatus({ status -> status.is4xxClientError }) { response ->
-                response.bodyToMono(UserResponse::class.java).map { body ->
+                response.bodyToMono(CartResponse::class.java).map { body ->
                     log.error { "[response code : ${response.statusCode()}] response : $body" }
 
                     when (response.statusCode()) {
@@ -63,7 +63,7 @@ class UserWebClient(
                     }
                 }
             }.onStatus({ status -> status.is5xxServerError }) { response ->
-                response.bodyToMono(UserResponse::class.java).map { body ->
+                response.bodyToMono(CartResponse::class.java).map { body ->
                     log.error { "[response code : ${response.statusCode()}] response : $body" }
 
                     HttpResponseException(
@@ -73,9 +73,9 @@ class UserWebClient(
                         errorMessage = "internal server error",
                     )
                 }
-            }.bodyToMono(UserResponse::class.java)
-            .transform(CircuitBreakerOperator.of(circuitBreakerRegistry.circuitBreaker(USER_CLIENT_CIRCUIT_BREAKER)))
-            .transform(RetryOperator.of(retryRegistry.retry(USER_CLIENT_RETRY_REGISTRY)))
+            }.bodyToMono(CartResponse::class.java)
+            .transform(CircuitBreakerOperator.of(circuitBreakerRegistry.circuitBreaker(CART_CLIENT_CIRCUIT_BREAKER)))
+            .transform(RetryOperator.of(retryRegistry.retry(CART_CLIENT_RETRY_REGISTRY)))
             .onErrorMap {
                 when (it) {
                     is HttpResponseException -> throw it
@@ -92,8 +92,7 @@ class UserWebClient(
 }
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-data class UserResponse(
-    val userId: String,
+data class CartResponse(
+    val id: String,
     val name: String,
-    val address: String,
 )
