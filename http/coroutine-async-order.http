@@ -1,0 +1,8 @@
+###coroutine async real world example
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{
+  "user_id": "USER0001",
+  "cart_id": "CART0001"
+}
