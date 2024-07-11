@@ -35,17 +35,18 @@ class OrderController(
             val cartItemDeferred = async { cartWebClient.getCartItem(cartId = request.cartId) }
             val userDeferred = async { userWebClient.getUser(userId = request.userId) }
 
-            val cart =
-                cartItemDeferred
-                    .await()
-                    .also {
-                        log.info { "cartItem : $it" }
-                    }
             val user =
                 userDeferred
                     .await()
                     .also {
                         log.info { "user : $it" }
+                    }
+
+            val cart =
+                cartItemDeferred
+                    .await()
+                    .also {
+                        log.info { "cartItem : $it" }
                     }
 
             // TODO create order

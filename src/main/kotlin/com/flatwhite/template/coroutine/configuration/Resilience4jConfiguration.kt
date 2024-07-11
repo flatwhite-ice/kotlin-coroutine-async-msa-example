@@ -37,7 +37,7 @@ class Resilience4jConfiguration {
             ).build()
 
     @Bean
-    fun circuitBreakerRegistry(): CircuitBreakerRegistry = CircuitBreakerRegistry.of(circuitBreakerConfig)
+    fun defaultCircuitBreakerRegistry(): CircuitBreakerRegistry = CircuitBreakerRegistry.of(circuitBreakerConfig)
 
     private val retryConfig: RetryConfig =
         RetryConfig
@@ -56,5 +56,5 @@ class Resilience4jConfiguration {
             .build()
 
     @Bean
-    fun retryRegistry(): RetryRegistry = RetryRegistry.of(retryConfig)
+    fun defaultRetryRegistry(): RetryRegistry = RetryRegistry.of(retryConfig)
 }

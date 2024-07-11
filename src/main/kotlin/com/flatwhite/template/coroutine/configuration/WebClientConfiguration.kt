@@ -6,6 +6,7 @@ import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
@@ -29,13 +30,14 @@ class WebClientConfiguration(
     private val reactorResourceFactory: ReactorResourceFactory,
     @Qualifier("snakeCaseWebObjectMapper")
     private val objectMapper: ObjectMapper,
+    @Value("\${webclient.default-client.base-url}")
+    private val baseUrl: String,
+    @Value("\${webclient.default-client.proxy-url:}")
+    private val proxyUrl: String,
 ) {
     companion object {
         private const val CONNECTION_PROVIDER_NAME = "default-web-client"
         private const val PROXY_SERVER = "http://proxy-host"
-
-        // TODO set your base url
-        private const val BASE_URL = "http://localhost:8080"
     }
 
     @Bean
@@ -49,7 +51,7 @@ class WebClientConfiguration(
                 clientDefaultCodecsConfigurer
                     .defaultCodecs()
                     .jackson2JsonDecoder(Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON))
-            }.baseUrl(BASE_URL)
+            }.baseUrl(baseUrl)
             // .filter() //logging customFilter
             .clientConnector(
                 ReactorClientHttpConnector(
@@ -77,10 +79,10 @@ class WebClientConfiguration(
                                 WriteTimeoutHandler(5L, TimeUnit.SECONDS),
                             )
                         }.let {
-                            if ("".isNullOrBlank().not()) {
+                            if (proxyUrl.isNullOrBlank().not()) {
                                 it.proxy { proxyProvider ->
                                     runCatching {
-                                        val proxyUrl = URI.create("")
+                                        val proxyUrl = URI.create(proxyUrl)
                                         proxyProvider
                                             .type(ProxyProvider.Proxy.HTTP)
                                             .host(proxyUrl.host)

@@ -21,8 +21,8 @@ private val log = KotlinLogging.logger {}
 class UserWebClient(
     @Qualifier("defaultWebClientBuilder")
     private val defaultWebClientBuilder: WebClient.Builder,
-    private val circuitBreakerRegistry: CircuitBreakerRegistry,
-    private val retryRegistry: RetryRegistry,
+    private val defaultCircuitBreakerRegistry: CircuitBreakerRegistry,
+    private val defaultRetryRegistry: RetryRegistry,
 ) {
     companion object {
         const val USER_CLIENT = "user-client"
@@ -74,8 +74,8 @@ class UserWebClient(
                     )
                 }
             }.bodyToMono(UserResponse::class.java)
-            .transform(CircuitBreakerOperator.of(circuitBreakerRegistry.circuitBreaker(USER_CLIENT_CIRCUIT_BREAKER)))
-            .transform(RetryOperator.of(retryRegistry.retry(USER_CLIENT_RETRY_REGISTRY)))
+            .transform(CircuitBreakerOperator.of(defaultCircuitBreakerRegistry.circuitBreaker(USER_CLIENT_CIRCUIT_BREAKER)))
+            .transform(RetryOperator.of(defaultRetryRegistry.retry(USER_CLIENT_RETRY_REGISTRY)))
             .onErrorMap {
                 when (it) {
                     is HttpResponseException -> throw it
