@@ -22,7 +22,7 @@ class TargetMockController {
     fun getCartItem(
         @PathVariable(value = "cart-id") cartId: String,
     ): CartResponse {
-        Thread.sleep(2000L)
+        Thread.sleep(4000L)
         return CartResponse(
             id = cartId,
             name = "($cartId)의 카트",

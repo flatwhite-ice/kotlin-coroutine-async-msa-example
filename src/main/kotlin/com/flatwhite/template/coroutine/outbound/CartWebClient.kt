@@ -21,8 +21,8 @@ private val log = KotlinLogging.logger {}
 class CartWebClient(
     @Qualifier("defaultWebClientBuilder")
     private val defaultWebClientBuilder: WebClient.Builder,
-    private val circuitBreakerRegistry: CircuitBreakerRegistry,
-    private val retryRegistry: RetryRegistry,
+    private val defaultCircuitBreakerRegistry: CircuitBreakerRegistry,
+    private val defaultRetryRegistry: RetryRegistry,
 ) {
     companion object {
         const val CART_CLIENT = "cart-client"
@@ -74,8 +74,8 @@ class CartWebClient(
                     )
                 }
             }.bodyToMono(CartResponse::class.java)
-            .transform(CircuitBreakerOperator.of(circuitBreakerRegistry.circuitBreaker(CART_CLIENT_CIRCUIT_BREAKER)))
-            .transform(RetryOperator.of(retryRegistry.retry(CART_CLIENT_RETRY_REGISTRY)))
+            .transform(CircuitBreakerOperator.of(defaultCircuitBreakerRegistry.circuitBreaker(CART_CLIENT_CIRCUIT_BREAKER)))
+            .transform(RetryOperator.of(defaultRetryRegistry.retry(CART_CLIENT_RETRY_REGISTRY)))
             .onErrorMap {
                 when (it) {
                     is HttpResponseException -> throw it
