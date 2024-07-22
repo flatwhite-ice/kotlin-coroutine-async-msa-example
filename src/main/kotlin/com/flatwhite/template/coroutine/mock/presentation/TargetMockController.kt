@@ -2,7 +2,10 @@ package com.flatwhite.template.coroutine.mock.presentation
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.flatwhite.template.coroutine.base.error.ErrorResponse
 import com.flatwhite.template.coroutine.mock.presentation.TargetMockController.Companion.BASE_URL
+import org.springframework.http.HttpStatusCode
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -40,6 +43,18 @@ class TargetMockController {
             address = "($userId)인 사람의 주소",
         )
     }
+
+    @GetMapping("/errors/{status-code}")
+    fun getErrorResponse(
+        @PathVariable(value = "status-code") statusCode: String,
+    ): ResponseEntity<ErrorResponse> =
+        ResponseEntity<ErrorResponse>(
+            ErrorResponse(
+                errorCode = statusCode,
+                errorMessage = "($statusCode)의 에러응답",
+            ),
+            HttpStatusCode.valueOf(statusCode.toInt()),
+        )
 }
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)

@@ -1,5 +1,6 @@
 package com.flatwhite.template.coroutine.outbound
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.flatwhite.template.coroutine.base.exception.HttpResponseException
@@ -23,6 +24,8 @@ class CartWebClient(
     private val defaultWebClientBuilder: WebClient.Builder,
     private val defaultCircuitBreakerRegistry: CircuitBreakerRegistry,
     private val defaultRetryRegistry: RetryRegistry,
+    @Qualifier("snakeCaseWebObjectMapper")
+    private val objectMapper: ObjectMapper,
 ) {
     companion object {
         const val CART_CLIENT = "cart-client"
@@ -40,9 +43,10 @@ class CartWebClient(
             .headers { } // TODO header setting
             .retrieve()
             .onStatus({ status -> status.is4xxClientError }) { response ->
-                response.bodyToMono(CartResponse::class.java).map { body ->
+                response.bodyToMono(String::class.java).map { body ->
                     log.error { "[response code : ${response.statusCode()}] response : $body" }
-
+                    // render value after error handling
+                    // val errorResponse: ErrorResponse = objectMapper.readValue(body, ErrorResponse::class.java)
                     when (response.statusCode()) {
                         HttpStatus.NOT_FOUND -> {
                             HttpResponseException(
@@ -63,7 +67,7 @@ class CartWebClient(
                     }
                 }
             }.onStatus({ status -> status.is5xxServerError }) { response ->
-                response.bodyToMono(CartResponse::class.java).map { body ->
+                response.bodyToMono(String::class.java).map { body ->
                     log.error { "[response code : ${response.statusCode()}] response : $body" }
 
                     HttpResponseException(
