@@ -1,6 +1,6 @@
-package com.flatwhite.template.coroutine.base.exception
+package com.flatwhite.template.coroutine.base.thorwable.exception
 
-import com.flatwhite.template.coroutine.base.error.ErrorResponse
+import com.flatwhite.template.coroutine.base.thorwable.error.ErrorResponse
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice

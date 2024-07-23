@@ -1,4 +1,4 @@
-package com.flatwhite.template.coroutine.base.error
+package com.flatwhite.template.coroutine.base.thorwable.error
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming

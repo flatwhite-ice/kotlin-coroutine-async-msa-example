@@ -1,4 +1,4 @@
-package com.flatwhite.template.coroutine.base.exception
+package com.flatwhite.template.coroutine.base.thorwable.exception
 
 import org.springframework.http.HttpStatus
 
