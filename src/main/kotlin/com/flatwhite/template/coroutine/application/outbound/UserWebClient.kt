@@ -1,9 +1,9 @@
-package com.flatwhite.template.coroutine.outbound
+package com.flatwhite.template.coroutine.application.outbound
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.flatwhite.template.coroutine.base.exception.HttpResponseException
+import com.flatwhite.template.coroutine.base.thorwable.exception.HttpResponseException
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
 import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator
 import io.github.resilience4j.reactor.retry.RetryOperator
@@ -78,8 +78,13 @@ class UserWebClient(
                     )
                 }
             }.bodyToMono(UserResponse::class.java)
-            .transform(CircuitBreakerOperator.of(defaultCircuitBreakerRegistry.circuitBreaker(USER_CLIENT_CIRCUIT_BREAKER)))
-            .transform(RetryOperator.of(defaultRetryRegistry.retry(USER_CLIENT_RETRY_REGISTRY)))
+            .transform(
+                CircuitBreakerOperator.of(
+                    defaultCircuitBreakerRegistry.circuitBreaker(
+                        USER_CLIENT_CIRCUIT_BREAKER,
+                    ),
+                ),
+            ).transform(RetryOperator.of(defaultRetryRegistry.retry(USER_CLIENT_RETRY_REGISTRY)))
             .onErrorMap {
                 when (it) {
                     is HttpResponseException -> throw it
