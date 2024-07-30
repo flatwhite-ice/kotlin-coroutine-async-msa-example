@@ -9,7 +9,7 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
 import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator
 import io.github.resilience4j.reactor.retry.RetryOperator
 import io.github.resilience4j.retry.RetryRegistry
-import kotlinx.coroutines.reactor.awaitSingleOrNull
+import kotlinx.coroutines.reactive.awaitSingle
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpStatus
@@ -35,7 +35,7 @@ class CartWebClient(
         const val CART_CLIENT_RETRY_REGISTRY = CART_CLIENT
     }
 
-    suspend fun getCartItem(cartId: String) = this.cartItem(cartId = cartId).awaitSingleOrNull()
+    suspend fun getCartItem(cartId: String) = this.cartItem(cartId = cartId).awaitSingle()
 
     val handle4xx: (ClientResponse) -> Mono<HttpResponseException> = { response ->
         response.bodyToMono(String::class.java).map { body ->

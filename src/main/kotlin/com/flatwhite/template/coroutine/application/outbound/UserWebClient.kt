@@ -8,7 +8,7 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
 import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator
 import io.github.resilience4j.reactor.retry.RetryOperator
 import io.github.resilience4j.retry.RetryRegistry
-import kotlinx.coroutines.reactor.awaitSingleOrNull
+import kotlinx.coroutines.reactor.awaitSingle
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpStatus
@@ -33,7 +33,7 @@ class UserWebClient(
         const val USER_CLIENT_RETRY_REGISTRY = USER_CLIENT
     }
 
-    suspend fun getUser(userId: String) = this.requestUser(userId = userId).awaitSingleOrNull()
+    suspend fun getUser(userId: String) = this.requestUser(userId = userId).awaitSingle()
 
     fun requestUser(userId: String): Mono<UserResponse> =
         defaultWebClientBuilder
