@@ -7,7 +7,7 @@ import com.flatwhite.template.coroutine.application.outbound.UserWebClient
 import com.flatwhite.template.coroutine.application.presentation.OrderController.Companion.BASE_URL
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -54,10 +54,10 @@ class OrderController(
             // val nearestStockId = nearestStockDeferred.await()
             // orderService.reserveStock(address = userAddress, stockId = nearestStockId)
             return@coroutineScope Order(
-                userId = user!!.userId,
+                userId = user.userId,
                 userName = user.name,
                 userAddress = user.address,
-                cartId = cart!!.id,
+                cartId = cart.id,
                 cartName = cart.name,
             )
         }

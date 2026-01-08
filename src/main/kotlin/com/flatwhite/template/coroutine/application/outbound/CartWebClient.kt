@@ -3,14 +3,13 @@ package com.flatwhite.template.coroutine.application.outbound
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.flatwhite.template.coroutine.application.presentation.mock.CartResponse
 import com.flatwhite.template.coroutine.base.thorwable.exception.HttpResponseException
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
 import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator
 import io.github.resilience4j.reactor.retry.RetryOperator
 import io.github.resilience4j.retry.RetryRegistry
 import kotlinx.coroutines.reactive.awaitSingle
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
